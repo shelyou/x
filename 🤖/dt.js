@@ -1,4 +1,3 @@
-// Array berisi item galeri
 const galleryItems = [
 { imgSrc: "IMG_8514.png", alt: "Afghanistan", label: "Afghanistan" },
 { imgSrc: "IMG_8514.png", alt: "Albania", label: "Albania" },
