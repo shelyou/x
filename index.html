@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Form</title>
-    <link rel="stylesheet" href="styles.css">
+         <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="neumorphic-card">
         <div class="neumorphic-card__header">
@@ -15,44 +14,43 @@
         <form id="login-form" onsubmit="loginUser(event)" class="neumorphic-form">
             <div class="neumorphic-input-wrapper">
                 <label for="neumorphic-username">onion</label>
-                <input type="text" name="neumorphic-username" id="neumorphic-username" placeholder="Onion" required>
+                <input type="text" name="neumorphic-username" id="neumorphic-username" placeholder="Onion">
             </div>
             <div class="neumorphic-input-wrapper">
                 <label for="neumorphic-password">Password</label>
-                <input type="password" name="neumorphic-password" id="neumorphic-password" placeholder="Password" required>
+                <input type="password" name="neumorphic-password" id="neumorphic-password" placeholder="Password">
             </div>
             <button type="submit">Sign in</button>
         </form>
-        <div class="neumorphic-card__footer">
-            <p>Don't have an account? <a href="signup.html">Sign up</a></p>
-        </div>
     </div>
-    <script src="script.js"></script>
-     <script>
-        // Periksa apakah token ada di localStorage
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = 'login.html';  // Redirect ke login jika token tidak ada
-        }
 
-        // Jika ada token, lakukan verifikasi token
-        async function verifyToken() {
-            const response = await fetch('/verify-token', {
+    <script>
+        async function loginUser(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('neumorphic-username').value;
+            const password = document.getElementById('neumorphic-password').value;
+
+            const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`  // Kirim token di header
-                }
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
             });
 
             const data = await response.json();
-            if (!data.success) {
-                alert('Session expired or invalid token');
-                window.location.href = 'login.html';  // Arahkan ke login jika token tidak valid
+
+            if (data.success) {
+                localStorage.setItem('token', data.token);  // Simpan token di localStorage
+                window.location.href = 'home.html';  // Arahkan ke home setelah login berhasil
+            } else {
+                alert('Login failed: ' + data.message);
             }
         }
-
-        verifyToken();
     </script>
 </body>
 </html>
