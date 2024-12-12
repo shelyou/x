@@ -3,174 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-    <style>
-        /* Style for Neumorphic Login Card */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            height: 100vh;
-            background-image: url('m.png'); /* Background Image */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #ff0000;
-            font-family: "Courier New", Courier, monospace;
-        }
-
-        .neumorphic-card {
-            background-color: rgba(26, 26, 26, 0.7);
-            width: 400px;
-            padding: 2rem;
-            border-radius: 10px;
-            border: 2px solid #ff0000;
-            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0), -15px -15px 30px rgba(255, 0, 0, 0.5);
-        }
-
-        .neumorphic-card__header {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .neumorphic-form {
-            margin: 2rem 0;
-        }
-
-        .neumorphic-input-wrapper {
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        .neumorphic-input-wrapper label {
-            font-size: 1rem;
-            font-weight: 300;
-            margin-left: 0.8rem;
-            color: #ff0000;
-        }
-
-        .neumorphic-input-wrapper input {
-            border: 2px solid #ff0000;
-            background-color: rgba(0, 0, 0, 0);
-            padding: 0.8rem 1.1rem;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            color: #ff0000;
-            box-shadow: inset 5px 5px 15px rgba(0, 0, 0, 0.9), inset -5px -5px 15px rgba(255, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .neumorphic-input-wrapper input:focus {
-            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
-            outline: none;
-        }
-
-        .neumorphic-form button {
-            border: 2px solid #ff0000;
-            background-color: rgba(0, 0, 0, 0);
-            width: 100%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #ff0000;
-            text-transform: uppercase;
-            padding: 0.9rem;
-            border-radius: 5px;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8), -5px -5px 15px rgba(255, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .neumorphic-form button:hover {
-            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
-        }
-
-        .neumorphic-card__footer p {
-            text-align: center;
-            font-size: 1rem;
-            margin: 0;
-        }
-    </style>
+    <title>Login Form</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div class="neumorphic-card">
         <div class="neumorphic-card__header">
-            <h2>Admin Login</h2>
+            <img src="p.png" alt="Login Logo">
         </div>
         <form id="login-form" onsubmit="loginUser(event)" class="neumorphic-form">
             <div class="neumorphic-input-wrapper">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" placeholder="admin@onion" required>
+                <label for="neumorphic-username">onion</label>
+                <input type="text" name="neumorphic-username" id="neumorphic-username" placeholder="Onion" required>
             </div>
             <div class="neumorphic-input-wrapper">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="admind" required>
+                <label for="neumorphic-password">Password</label>
+                <input type="password" name="neumorphic-password" id="neumorphic-password" placeholder="Password" required>
             </div>
             <button type="submit">Sign in</button>
         </form>
+        <div class="neumorphic-card__footer">
+            <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+        </div>
     </div>
-
-    <script>
-        // Inisialisasi nilai untuk rate limiting
-        let loginAttempts = 0;
-        let loginTimeout;
-
-        // Fungsi untuk menangani login
-        async function loginUser(event) {
-            event.preventDefault();
-
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            // Validasi input
-            if (username === '' || password === '') {
-                alert('Username dan password harus diisi.');
-                return;
-            }
-
-            if (!enforceRateLimit()) {
-                return;
-            }
-
-            // Hash password sebelum mengirim
-            const hashedPassword = await hashPassword(password);
-
-            // Verifikasi login admin
-            if (username === 'admin@onion' && hashedPassword === '9dd61ddf717fb255c07e0648b6f84b571a81ac3c4a6474d5c8e3d2531b6220b1') {
-                alert('Login berhasil!');
-                window.location.href = 'home.html'; // Arahkan ke halaman admin
-            } else {
-                alert('Login gagal: Username atau password salah');
-            }
-        }
-
-        // Fungsi untuk hashing password menggunakan SHA-256
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hash))
-                .map(b => b.toString(16).padStart(2, '0'))
-                .join('');
-        }
-
-        // Rate limiting sederhana (client-side)
-        function enforceRateLimit() {
-            if (loginAttempts >= 3) {
-                alert('Terlalu banyak percobaan login. Coba lagi nanti.');
-                return false;
-            }
-            loginAttempts++;
-            clearTimeout(loginTimeout);
-            loginTimeout = setTimeout(() => {
-                loginAttempts = 0;
-            }, 60000); // Reset percobaan setelah 1 menit
-            return true;
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
