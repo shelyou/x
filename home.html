@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Welcome to the Home Page</h1>
+
+    <script>
+        // Periksa apakah token ada di localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';  // Redirect ke login jika token tidak ada
+        }
+
+        // Jika ada token, lakukan verifikasi token
+        async function verifyToken() {
+            const response = await fetch('http://localhost:3000/verify-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`  // Kirim token di header
+                }
+            });
+
+            const data = await response.json();
+            if (!data.success) {
+                alert('Session expired or invalid token');
+                window.location.href = 'login.html';  // Arahkan ke login jika token tidak valid
+            }
+        }
+
+        verifyToken();
+    </script>
+</body>
+</html>
