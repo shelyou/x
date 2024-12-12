@@ -1,0 +1,138 @@
+/* CSS Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background-image: url('m.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ff0000;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.neumorphic-card {
+    position: relative;
+    background-color: rgba(26, 26, 26, 0.7);
+    width: 400px;
+    height: auto;
+    margin: 1rem;
+    padding: 2rem;
+    border-radius: 5px;
+    border: 2px solid #ff0000;
+    box-shadow: 15px 15px 30px rgba(0, 0, 0, 0), -15px -15px 30px rgba(255, 0, 0, 0);
+    overflow: hidden;
+}
+
+.neumorphic-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('q.png') no-repeat center center/cover;
+    opacity: 1;
+    z-index: 2;
+    pointer-events: none;
+    filter: drop-shadow(0px 5px 10px rgba(255, 0, 0, 0.7));
+}
+
+.neumorphic-card__header,
+.neumorphic-form,
+.neumorphic-card__footer {
+    position: relative;
+    z-index: 1;
+}
+
+.neumorphic-card__header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.neumorphic-card__header img {
+    width: 100%;
+    height: 100px;
+}
+
+.neumorphic-form {
+    margin: 2rem 0;
+}
+
+.neumorphic-input-wrapper {
+    width: 100%;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.neumorphic-input-wrapper label {
+    font-size: 1rem;
+    font-weight: 300;
+    margin-left: 0.8rem;
+    color: #ff0000;
+}
+
+.neumorphic-input-wrapper input {
+    border: 2px solid #ff0000;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 0.8rem 1.1rem;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: #ff0000;
+    box-shadow:
+        inset 5px 5px 15px rgba(0, 0, 0, 0.9),
+        inset -5px -5px 15px rgba(255, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.neumorphic-input-wrapper input:focus {
+    box-shadow:
+        0 0 10px #ff0000,
+        0 0 20px #ff0000;
+    outline: none;
+}
+
+.neumorphic-form button {
+    border: 2px solid #ff0000;
+    background-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    margin: 0.6rem 0 1rem 0;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #ff0000;
+    text-transform: uppercase;
+    padding: 0.9rem;
+    border-radius: 5px;
+    box-shadow:
+        5px 5px 15px rgba(0, 0, 0, 0.8),
+        -5px -5px 15px rgba(255, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.neumorphic-form button:hover {
+    box-shadow:
+        0 0 10px #ff0000,
+        0 0 20px #ff0000;
+}
+
+.neumorphic-card__footer p {
+    text-align: center;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.neumorphic-card__footer a {
+    text-decoration: none;
+    color: #ff0000;
+}
+
+.neumorphic-card__footer a:hover {
+    text-decoration: underline;
+}
