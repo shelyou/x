@@ -1,211 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Linktree</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f4f8;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-    <style>
-        /* CSS Styles */
-        * {
-            box-sizing: border-box;
-        }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 20px;
+    }
 
-        body {
-            margin: 0;
-            height: 100vh;
-            background-image: url('m.png'); /* Ganti dengan nama file gambar latar belakang */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #ff0000;
-            font-family: "Courier New", Courier, monospace;
-        }
+    header {
+      margin-bottom: 20px;
+    }
 
-        .neumorphic-card {
-            position: relative;
-            background-color: rgba(26, 26, 26, 0.7);
-            width: 400px;
-            height: auto;
-            margin: 1rem;
-            padding: 2rem;
-            border-radius: 5px;
-            border: 2px solid #ff0000;
-            box-shadow:
-                15px 15px 30px rgba(0, 0, 0, 0),
-                -15px -15px 30px rgba(255, 0, 0, 0);
-            overflow: hidden;
-        }
+    header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
 
-        .neumorphic-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('q.png') no-repeat center center/cover;
-            opacity: 1;
-            z-index: 2;
-            pointer-events: none;
-            filter: drop-shadow(0px 5px 10px rgba(255, 0, 0, 0.7));
-        }
+    header h1 {
+      font-size: 1.8rem;
+      margin: 0;
+      color: #333;
+    }
 
-        .neumorphic-card__header,
-        .neumorphic-form,
-        .neumorphic-card__footer {
-            position: relative;
-            z-index: 1;
-        }
+    header p {
+      font-size: 1rem;
+      color: #666;
+      margin-top: 5px;
+    }
 
-        .neumorphic-card__header {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
+    .links {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-        .neumorphic-card__header img {
-            width: 100%;
-            height: 100px;
-        }
+    .link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f4f7fc;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, background 0.3s;
+    }
 
-        .neumorphic-form {
-            margin: 2rem 0;
-        }
+    .link:hover {
+      background: #e2e8f0;
+      transform: scale(1.02);
+    }
 
-        .neumorphic-input-wrapper {
-            width: 100%;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-        }
+    .link img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
 
-        .neumorphic-input-wrapper label {
-            font-size: 1rem;
-            font-weight: 300;
-            margin-left: 0.8rem;
-            color: #ff0000;
-        }
+    .link-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
 
-        .neumorphic-input-wrapper input {
-            border: 2px solid #ff0000;
-            background-color: rgba(0, 0, 0, 0);
-            padding: 0.8rem 1.1rem;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            color: #ff0000;
-            box-shadow:
-                inset 5px 5px 15px rgba(0, 0, 0, 0.9),
-                inset -5px -5px 15px rgba(255, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
+    .link-content span {
+      font-size: 1rem;
+      color: #333;
+    }
 
-        .neumorphic-input-wrapper input:focus {
-            box-shadow:
-                0 0 10px #ff0000,
-                0 0 20px #ff0000;
-            outline: none;
-        }
+    .link a {
+      text-decoration: none;
+      background: #3b82f6;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
 
-        .neumorphic-form button {
-            border: 2px solid #ff0000;
-            background-color: rgba(0, 0, 0, 0);
-            width: 100%;
-            margin: 0.6rem 0 1rem 0;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #ff0000;
-            text-transform: uppercase;
-            padding: 0.9rem;
-            border-radius: 5px;
-            box-shadow:
-                5px 5px 15px rgba(0, 0, 0, 0.8),
-                -5px -5px 15px rgba(255, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
+    .link a:hover {
+      background: #2563eb;
+    }
 
-        .neumorphic-form button:hover {
-            box-shadow:
-                0 0 10px #ff0000,
-                0 0 20px #ff0000;
-        }
-
-        .neumorphic-card__footer p {
-            text-align: center;
-            font-size: 1rem;
-            margin: 0;
-        }
-
-        .neumorphic-card__footer a {
-            text-decoration: none;
-            color: #ff0000;
-        }
-
-        .neumorphic-card__footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Hide the password form initially */
-        #password-form {
-            display: none;
-        }
-    </style>
+    footer {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
-    <div class="neumorphic-card">
-        <div class="neumorphic-card__header">
-            <img src="p.png" alt="Login Logo">
-        </div>
-        <form id="username-form" onsubmit="verifyUsername(event)" class="neumorphic-form">
-            <div class="neumorphic-input-wrapper">
-                <label for="neumorphic-username">Onion</label>
-                <input type="text" name="neumorphic-username" id="neumorphic-username" placeholder="Onion">
-            </div>
-            <button type="submit">Next</button>
-        </form>
+  <div class="container">
+    <header>
+      <!-- Profile Image -->
+      <img src="https://via.placeholder.com/100" alt="Profile Picture" id="profileImage">
+      <!-- Name and Bio -->
+      <h1 id="userName">Your Name</h1>
+      <p id="userBio">Welcome to my link page!</p>
+    </header>
 
-        <form id="password-form" onsubmit="verifyPassword(event)" class="neumorphic-form">
-            <div class="neumorphic-input-wrapper">
-                <label for="neumorphic-password">Password</label>
-                <input type="password" name="neumorphic-password" id="neumorphic-password" placeholder="Password">
-            </div>
-            <button type="submit">Sign in</button>
-        </form>
-
-        <div id="home" style="display: none; text-align: center;">
-            <h2>Welcome to the Home Page</h2>
-            <p>You have successfully logged in!</p>
-        </div>
+    <!-- Links Section -->
+    <div class="links" id="linksContainer">
+      <!-- Dynamic links will be added here -->
     </div>
 
-    <script>
-        function verifyUsername(event) {
-            event.preventDefault();
-            var username = document.getElementById("neumorphic-username").value;
-            
-            if (username === "onion") {
-                // Hide username form and show password form
-                document.getElementById("username-form").style.display = "none";
-                document.getElementById("password-form").style.display = "block";
-            } else {
-                alert("Invalid username.");
-            }
-        }
+    <footer>
+      &copy; 2024 Your Name. All rights reserved.
+    </footer>
+  </div>
 
-        function verifyPassword(event) {
-            event.preventDefault();
-            var password = document.getElementById("neumorphic-password").value;
-            
-            if (password === "password") { // Example: Change to actual password logic
-                // Hide password form and show home page
-                document.getElementById("password-form").style.display = "none";
-                document.getElementById("home").style.display = "block";
-            } else {
-                alert("Invalid password.");
-            }
+  <script>
+    // Sample user data
+    const user = {
+      profileImage: "https://via.placeholder.com/100",
+      name: "Your Name",
+      bio: "Check out my links below!",
+      links: [
+        {
+          name: "Instagram",
+          url: "https://www.instagram.com/claudyafx/",
+          icon: "https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+        },
+        {
+          name: "Twitter",
+          url: "https://twitter.com",
+          icon: "https://cdn-icons-png.flaticon.com/512/733/733579.png"
+        },
+        {
+          name: "YouTube",
+          url: "https://youtube.com",
+          icon: "https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+        },
+        {
+          name: "LinkedIn",
+          url: "https://linkedin.com",
+          icon: "https://cdn-icons-png.flaticon.com/512/3536/3536505.png"
         }
-    </script>
+      ]
+    };
+
+    // Add user data to the page
+    document.getElementById("profileImage").src = user.profileImage;
+    document.getElementById("userName").textContent = user.name;
+    document.getElementById("userBio").textContent = user.bio;
+
+    const linksContainer = document.getElementById("linksContainer");
+
+    // Add links dynamically
+    user.links.forEach(link => {
+      // Create link container
+      const linkDiv = document.createElement("div");
+      linkDiv.className = "link";
+
+      // Link content
+      const linkContent = document.createElement("div");
+      linkContent.className = "link-content";
+
+      const icon = document.createElement("img");
+      icon.src = link.icon;
+      icon.alt = `${link.name} Icon`;
+
+      const text = document.createElement("span");
+      text.textContent = link.name;
+
+      linkContent.appendChild(icon);
+      linkContent.appendChild(text);
+
+      // Link button
+      const linkButton = document.createElement("a");
+      linkButton.href = link.url;
+      linkButton.target = "_blank";
+      linkButton.textContent = "Visit";
+
+      // Combine content and button
+      linkDiv.appendChild(linkContent);
+      linkDiv.appendChild(linkButton);
+
+      // Add to container
+      linksContainer.appendChild(linkDiv);
+    });
+  </script>
 </body>
 </html>
