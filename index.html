@@ -39,10 +39,8 @@
             th, td {
                 padding: 7px;
             }
-            td:nth-child(10), td:nth-child(11) {
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
+            td {
+                word-wrap: break-word; /* Menjaga tanggal agar tidak terpotong */
             }
         }
     </style>
@@ -51,12 +49,23 @@
     <div id="content"></div>
 
     <script>
+        // Fungsi untuk memformat angka ke format Rupiah
         function formatToRupiah(value) {
             const number = parseFloat(value);
             if (isNaN(number)) return "Rp.0,00";
             return "Rp." + number.toLocaleString("id-ID", { minimumFractionDigits: 2 });
         }
 
+        // Fungsi untuk memformat tanggal ke format "Tanggal/Bulan/Tahun"
+        function formatTanggal(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.getMonth() + 1; // bulan dimulai dari 0
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Fungsi untuk memuat data JSON dan merender tabel
         async function loadJSON(file, title, isPlastic = false) {
             try {
                 const response = await fetch(file);
@@ -68,18 +77,23 @@
             }
         }
 
+        // Fungsi untuk merender tabel
         function renderTables(tables, title, isPlastic) {
             const contentDiv = document.getElementById('content');
+
+            // Tambahkan judul tabel
             const tableTitle = document.createElement('div');
             tableTitle.className = 'table-title';
             tableTitle.textContent = title;
             contentDiv.appendChild(tableTitle);
 
             tables.forEach(table => {
+                // Buat judul setiap tabel
                 const subTableTitle = document.createElement('h3');
                 subTableTitle.textContent = table.name;
                 contentDiv.appendChild(subTableTitle);
 
+                // Buat tabel
                 const tableElement = document.createElement('table');
                 tableElement.innerHTML = `
                     <thead>
@@ -110,7 +124,9 @@
 
                 const tbody = tableElement.querySelector('tbody');
                 table.data.forEach((item, index) => {
+                    // Menampilkan nama barang hanya sekali
                     if (isPlastic) {
+                        // Menampilkan data plastik dengan ukuran
                         const firstRow = `
                             <tr>
                                 <td rowspan="${item.ukuran.length}">${index + 1}</td>
@@ -118,18 +134,18 @@
                                 ${isPlastic ? `<td>${item.ukuran[0] || '-'}</td>` : ''}
                                 <td>${item.kode_gudang}</td>
                                 <td>${item.kode_toko}</td>
-                                <td class="money" onclick="editPrice(event, '1000_gram', ${item.harga_1000_gram}, ${index})">${formatToRupiah(item.harga_1000_gram)}</td>
-                                <td class="money" ```javascript
-onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${formatToRupiah(item.harga_500_gram)}</td>
-                                <td class="money" onclick="editPrice(event, '250_gram', ${item.harga_250_gram}, ${index})">${formatToRupiah(item.harga_250_gram)}</td>
+                                <td class="money" onclick="editPrice(event, '1000_gram', ${item.harga_1000_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '1000_gram', item.harga_1000_gram))}</td>
+                                <td class="money" onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '500_gram', item.harga_500_gram))}</td>
+                                <td class="money" onclick="editPrice(event, '250_gram', ${item.harga_250_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '250_gram', item.harga_250_gram))}</td>
                                 <td>${item.stok_gudang}</td>
                                 <td>${item.stok_toko}</td>
-                                <td>${item.tanggal_masuk}</td>
-                                <td>${item.tanggal_keluar}</td>
+                                <td>${formatTanggal(item.tanggal_masuk)}</td>
+                                <td>${formatTanggal(item.tanggal_keluar)}</td>
                             </tr>
                         `;
-                        tbody.innerHTML += firstRow;
+                        tbody.innerHTML += firstRow; // Menambahkan baris pertama
 
+                        // Menambahkan baris untuk ukuran lainnya
                         if (item.ukuran.length > 1) {
                             item.ukuran.slice(1).forEach(ukuran => {
                                 const row = document.createElement('tr');
@@ -137,31 +153,32 @@ onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${forma
                                     <td>${ukuran}</td>
                                     <td>${item.kode_gudang}</td>
                                     <td>${item.kode_toko}</td>
-                                    <td class="money" onclick="editPrice(event, '1000_gram', ${item.harga_1000_gram}, ${index})">${formatToRupiah(item.harga_1000_gram)}</td>
-                                    <td class="money" onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${formatToRupiah(item.harga_500_gram)}</td>
-                                    <td class="money" onclick="editPrice(event, '250_gram', ${item.harga_250_gram}, ${index})">${formatToRupiah(item.harga_250_gram)}</td>
+                                    <td class="money" onclick="editPrice(event, '1000_gram', ${item.harga_1000_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '1000_gram', item.harga_1000_gram))}</td>
+                                    <td class="money" onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '500_gram', item.harga_500_gram))}</td>
+                                    <td class="money" onclick="editPrice(event, '250_gram', ${item.harga_250_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '250_gram', item.harga_250_gram))}</td>
                                     <td>${item.stok_gudang}</td>
                                     <td>${item.stok_toko}</td>
-                                    <td>${item.tanggal_masuk}</td>
-                                    <td>${item.tanggal_keluar}</td>
+                                    <td>${formatTanggal(item.tanggal_masuk)}</td>
+                                    <td>${formatTanggal(item.tanggal_keluar)}</td>
                                 `;
                                 tbody.appendChild(row);
                             });
                         }
                     } else {
+                        // Menampilkan data kue tanpa perubahan
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${index + 1}</td>
                             <td>${item.nama_barang}</td>
                             <td>${item.kode_gudang}</td>
                             <td>${item.kode_toko}</td>
-                            <td class="money" onclick="editPrice(event, '1000_gram', ${item.harga_1000_gram}, ${index})">${formatToRupiah(item.harga_1000_gram)}</td>
-                            <td class="money" onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${formatToRupiah(item.harga_500_gram)}</td>
-                            <td class="money" onclick="editPrice(event, '250_gram', ${item.harga_250_gram}, ${index})">${formatToRupiah(item.harga_250_gram)}</td>
+                            <td class="money" onclick="editPrice(event, '1000_gram', ${item.harga_1000_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '1000_gram', item.harga_1000_gram))}</td>
+                            <td class="money" onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '500_gram', item.harga_500_gram))}</td>
+                            <td class="money" onclick="editPrice(event, '250_gram', ${item.harga_250_gram}, ${index})">${formatToRupiah(getStoredPrice(item.id, '250_gram', item.harga_250_gram))}</td>
                             <td>${item.stok_gudang}</td>
                             <td>${item.stok_toko}</td>
-                            <td>${item.tanggal_masuk}</td>
-                            <td>${item.tanggal_keluar}</td>
+                            <td>${formatTanggal(item.tanggal_masuk)}</td>
+                            <td>${formatTanggal(item.tanggal_keluar)}</td>
                         `;
                         tbody.appendChild(row);
                     }
@@ -171,6 +188,25 @@ onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${forma
             });
         }
 
+        // Fungsi untuk mendapatkan harga yang disimpan di localStorage
+        function getStoredPrice(itemId, priceType, defaultPrice) {
+            const storedData = localStorage.getItem(itemId);
+            if (storedData) {
+                const prices = JSON.parse(storedData);
+                return prices[priceType] || defaultPrice;
+            }
+            return defaultPrice;
+        }
+
+        // Fungsi untuk menyimpan harga yang baru ke localStorage
+        function savePrice(itemId, priceType, price) {
+            const storedData = localStorage.getItem(itemId);
+            let prices = storedData ? JSON.parse(storedData) : {};
+            prices[priceType] = price;
+            localStorage.setItem(itemId, JSON.stringify(prices));
+        }
+
+        // Fungsi untuk memunculkan pop-up PIN dan mengedit harga
         let currentPriceElement, currentPriceType, currentPriceIndex;
 
         function editPrice(event, priceType, currentPrice, index) {
@@ -178,34 +214,28 @@ onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${forma
             currentPriceType = priceType;
             currentPriceIndex = index;
 
+            // Pop-up untuk meminta PIN
             const pin = prompt('Masukkan PIN untuk mengubah harga:');
-            const validPins = ['1234', '5678'];
+            const validPins = ['1234', '5678']; // PIN yang valid
 
             if (validPins.includes(pin)) {
+                // Jika PIN benar, minta harga baru
                 const newPrice = prompt('Masukkan harga baru:');
                 if (newPrice !== null && !isNaN(newPrice) && newPrice > 0) {
                     newPriceFormatted = formatToRupiah(newPrice);
-                    currentPriceElement.textContent = newPriceFormatted;
-
-                    fetch('/update-price', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            file: 'mdkue.json', // or 'mdplastik.json' based on your context
-                            index: currentPriceIndex,
-                            priceType: currentPriceType,
-                            newPrice: newPrice,
-                        }),
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('Error updating price:', error);
-                    });
+                    if (currentPriceType === '1000_gram') {
+                        // Update harga 1000 gram
+                        savePrice(currentPriceIndex, '1000_gram', newPrice);
+                        currentPriceElement.textContent = newPriceFormatted;
+                    } else if (currentPriceType === '500_gram') {
+                        // Update harga 500 gram
+                        savePrice(currentPriceIndex, '500_gram', newPrice);
+                        currentPriceElement.textContent = newPriceFormatted;
+                    } else if (currentPriceType === '250_gram') {
+                        // Update harga 250 gram
+                        savePrice(currentPriceIndex, '250_gram', newPrice);
+                        currentPriceElement.textContent = newPriceFormatted;
+                    }
                 } else {
                     alert('Harga tidak valid!');
                 }
@@ -214,9 +244,10 @@ onclick="editPrice(event, '500_gram', ${item.harga_500_gram}, ${index})">${forma
             }
         }
 
+        // Muat data JSON dan render tabel dengan judul
         document.addEventListener('DOMContentLoaded', () => {
-            loadJSON('mdkue.json', 'Daftar Stok Kue');
-            loadJSON('mdplastik.json', 'Daftar Stok Plastik', true);
+            loadJSON('mdkue.json', 'Daftar Stok Kue');   // Data dari file JSON pertama
+            loadJSON('mdplastik.json', 'Daftar Stok Plastik', true); // Data dari file JSON kedua (hanya plastik yang diubah)
         });
     </script>
 </body>
